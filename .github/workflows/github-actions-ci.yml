@@ -33,4 +33,7 @@ jobs:
     - name: Deployer application Database Mysql
       run: kubectl apply -f kubernetes/mysql.yaml
 
+    - name: Deployer application Python Backend
+      run: kubectl apply -f kubernetes/python-backend.yaml
+
   
