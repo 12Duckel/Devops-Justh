@@ -1,0 +1,72 @@
+name: Build and Deploy to EKS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: tsimagnova/eks-app
+      IMAGE_TAG: python-app-1
+      AWS_DEFAULT_REGION: us-east-1
+      EKS_CONTAINER_NAME: fenelin
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
+      with:
+        version: '20.10.16' # Update to the desired Docker version
+
+    - name: Login to Docker Registry
+      run: docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASS }}
+
+    - name: Build Docker image
+      run: |
+        cd backend
+        docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+        docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+    - name: Set up AWS CLI and kubectl
+      run: |
+        sudo apt-get update -qy
+        sudo apt-get install -y awscli
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+        chmod +x kubectl
+        sudo mv kubectl /usr/local/bin/
+
+    - name: Configure AWS CLI
+      run: |
+        aws configure set aws_access_key_id ${{ env.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region ${{ env.AWS_DEFAULT_REGION }}
+
+    - name: Update kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --region ${{ env.AWS_DEFAULT_REGION }} --name ${{ env.EKS_CONTAINER_NAME }}
+
+    - name: Verify Kubernetes configuration
+      run: |
+        cat $HOME/.kube/config
+        aws eks describe-cluster --name ${{ env.EKS_CONTAINER_NAME }}
+        kubectl config view
+        kubectl version
+        kubectl config current-context
+        kubectl config get-contexts
+
+    - name: Deploy to EKS
+      run: |
+        export KUBECONFIG=$HOME/.kube/config
+        kubectl get nodes
+        kubectl apply -f backend/python.yaml
