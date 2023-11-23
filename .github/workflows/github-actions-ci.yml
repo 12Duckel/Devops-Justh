@@ -1,26 +1,19 @@
-name: Build and Deploy to EKS
-
+name: Node js app deploy to EKS
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    env:
-      IMAGE_NAME: tsimagnova/eks-app
-      IMAGE_TAG: python-app-1
-      AWS_DEFAULT_REGION: us-east-1
-      EKS_CONTAINER_NAME: fenelin
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Set up Docker
-      uses: docker/setup-docker@v2
+    - name: Install kubectl
+      uses: azure/setup-kubectl@v2.0
       with:
-        version: '20.10.16' # Update to the desired Docker version
-
-    - name: Login to Docker Registry
-      run: docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASS }}
+        version: 'v1.24.0' # default is latest stable
+      id: install
