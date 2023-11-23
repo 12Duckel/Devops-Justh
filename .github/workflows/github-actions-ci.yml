@@ -28,7 +28,7 @@ jobs:
     - name: Describe EKS cluster
       run: aws eks describe-cluster --name duckel
     - name: Deployer application phpmyadmin
-      run: kubectl apply -f kubernetes/phpmyadmin.yaml
+      run: kubectl delete -f kubernetes/phpmyadmin.yaml
       
     - name: Deployer application Database Mysql
       run: kubectl apply -f kubernetes/mysql.yaml
