@@ -10,7 +10,7 @@ logging.basicConfig(filename='log/app.log', level=logging.DEBUG)
 
 origins = [
     "http://localhost",
-    "http://a6b598025ebd843a599f63c5ad0c0e81-1899803292.us-east-1.elb.amazonaws.com/:31000",
+    "http://ec2-44-221-49-17.compute-1.amazonaws.com:31000",
     "http://localhost:3000",  # Remplacez ceci par l'URL de votre frontend React
 ]
 

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const url = 'http://a6b598025ebd843a599f63c5ad0c0e81-1899803292.us-east-1.elb.amazonaws.com/:30000';
+const url = 'http://ec2-44-221-49-17.compute-1.amazonaws.com:30000';
 
 export function getStudents() {
   return axios.get(url + '/etudiants/')
