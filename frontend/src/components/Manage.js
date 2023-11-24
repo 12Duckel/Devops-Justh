@@ -74,7 +74,7 @@ const Manage = () => {
         <p id="manage"></p>
         <ButtonToolbar>
           <Button variant="primary" onClick={handleAdd}>
-            Ajouter étudiant
+            AJOUTER étudiant
           </Button>
           <AddStudentModal show={addModalShow} setUpdated={fetchStudents} onHide={AddModelClose}></AddStudentModal>
         </ButtonToolbar>
