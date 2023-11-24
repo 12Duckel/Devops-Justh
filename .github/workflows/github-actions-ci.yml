@@ -20,6 +20,7 @@ jobs:
         cd backend
         docker build -t ${{ env.IMAGE_NAME_BACKEND }} .
         docker push ${{ env.IMAGE_NAME_BACKEND }}
+        cd ..
     - name: Build Docker image Frontend
       run: |
         cd frontend
