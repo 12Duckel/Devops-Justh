@@ -5,7 +5,22 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-  deploy:
+   build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
+      with:
+        docker-version: '20.10.16'
+      env:
+        DOCKER_TLS_CERTDIR: "/certs"
+
+    - name: Log in to Docker Registry
+      run: docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASS }}
+   deploy:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
