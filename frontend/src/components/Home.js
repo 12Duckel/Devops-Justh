@@ -1,4 +1,4 @@
-import slide01 from '../static/images.jpeg.jpg'
+import images from '../static/images.jpeg.jpg'
 import slide02 from '../static/slide02.jpg'
 import slide03 from '../static/slide03.jpg'
 
@@ -11,7 +11,7 @@ const Home = () => {
       <Carousel.Item>
         <img
           className="d-block w-100"
-          src={images.jpeg}
+          src={images}
           alt="First slide"
         />
       </Carousel.Item>
