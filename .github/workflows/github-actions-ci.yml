@@ -7,11 +7,24 @@ on:
 jobs:
    build:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME_FRONTEND: tsimagnova/frontendv10
+      IMAGE_NAME_BACKEND: tsimagnova/devops_backend
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - name: Log in to Docker Registry
       run: docker login -u ${{ secrets.DOCKER_REGISTRY_USER }} -p ${{ secrets.DOCKER_REGISTRY_PASS }}
+    - name: Build Docker image Backend
+      run: |
+        cd backend
+        docker build -t ${{ env.IMAGE_NAME_BACKEND }} .
+        docker push ${{ env.IMAGE_NAME_BACKEND }}
+    - name: Build Docker image Frontend
+      run: |
+        cd ../frontend
+        docker build -t ${{ env.IMAGE_NAME_FRONTEND }} .
+        docker push ${{ env.IMAGE_NAME_FRONTEND }}
    deploy:
     runs-on: ubuntu-latest
     steps:
