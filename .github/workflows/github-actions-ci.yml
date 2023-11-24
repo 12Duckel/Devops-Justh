@@ -28,14 +28,18 @@ jobs:
     - name: Describe EKS cluster
       run: aws eks describe-cluster --name devops
     - name: Deployer application phpmyadmin
-      run: kubectl apply -f kubernetes/phpmyadmin.yaml
+      run: kubectl delete -f kubernetes/phpmyadmin.yaml
       
     - name: Deployer application Database Mysql
-      run: kubectl apply -f kubernetes/mysql.yaml
+      run: kubectl delete -f kubernetes/mysql.yaml
 
     - name: Deployer application Python Backend
-      run: kubectl apply -f kubernetes/python-backend.yaml
+      run: |
+        kubectl delete -f kubernetes/python-backend.yaml
+        kubectl apply -f kubernetes/python-backend.yaml
     - name: Deployer application Reactjs Frontend
-      run: kubectl apply -f kubernetes/react-frontend.yaml
+      run: |
+        kubectl delete -f kubernetes/react-frontend.yaml
+        kubectl apply -f kubernetes/react-frontend.yaml
 
   
