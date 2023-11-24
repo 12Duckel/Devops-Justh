@@ -23,12 +23,12 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1 
     - name : update the kube config
-      run: aws eks update-kubeconfig --name duckel
+      run: aws eks update-kubeconfig --name devops
 
     - name: Describe EKS cluster
-      run: aws eks describe-cluster --name duckel
+      run: aws eks describe-cluster --name devops
     - name: Deployer application phpmyadmin
-      run: kubectl delete -f kubernetes/phpmyadmin.yaml
+      run: kubectl apply -f kubernetes/phpmyadmin.yaml
       
     - name: Deployer application Database Mysql
       run: kubectl apply -f kubernetes/mysql.yaml
