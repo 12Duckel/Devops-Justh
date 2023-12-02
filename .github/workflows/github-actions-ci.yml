@@ -44,10 +44,10 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1 
     - name : update the kube config
-      run: aws eks update-kubeconfig --name devops
+      run: aws eks update-kubeconfig --name primuslearning
 
     - name: Describe EKS cluster
-      run: aws eks describe-cluster --name devops
+      run: aws eks describe-cluster --name primuslearning
     - name: Deployer application phpmyadmin
       run: kubectl apply -f kubernetes/phpmyadmin.yaml
       
